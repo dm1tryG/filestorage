@@ -1,2 +1,4 @@
-# filestorage
-file storage with aiohttp
+# AIOHTTP File Storage
+
+# Deploy
+docker-compose up

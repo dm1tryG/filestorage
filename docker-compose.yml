@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  backend:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python main.py
+    tty: true
+    volumes:
+      - ./:/app/:cached
+      - ./.docker/.ipython:/root/.ipython:cached
+    environment:
+      PYTHONPATH: .
+    restart: on-failure
+    ports:
+      - "8080:8080"
