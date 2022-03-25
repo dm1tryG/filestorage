@@ -3,7 +3,7 @@
 
 ## Deploy
 ```console
-docker-compose up
+docker-compose up --build
 ```
 
 ## Use it
