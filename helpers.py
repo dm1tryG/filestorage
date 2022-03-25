@@ -7,6 +7,8 @@ def search_file(file_hash: str) -> str:
 
     :param file_hash: str - File hash
     :return: str - full path to file
+
+    # TODO: improve search method (bu hash and etc.)
     """
     list_files = os.listdir(f'store/{file_hash[:2]}')
     for filename in list_files:

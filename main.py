@@ -5,19 +5,17 @@ import hashlib
 
 from aiohttp import web
 from aiohttp.web import Request
-from aiohttp import streamer
+
 from helpers import mkdir, search_file
 
 
-
-async def file_reader(file_path=None):
+async def file_provider(file_path=None):
     """ File streamer """
     with open(file_path, 'rb') as f:
-        chunk = f.read(2 ** 16)
+        chunk = True
         while chunk:
-            yield chunk
             chunk = f.read(2 ** 16)
-
+            yield chunk
 
 
 async def upload(request: Request):
@@ -55,16 +53,14 @@ async def download(request: Request):
     file_hash = f'{request.match_info["hash"]}'
     file_path = search_file(file_hash=file_hash)
 
-
-
     if file_path:
         stream = web.StreamResponse(headers={"Content-Disposition": f"attachment; filename={file_path.split('/')[-1]}"})
         await stream.prepare(request)
 
-        async for i in file_reader(file_path):
+        async for i in file_provider(file_path):
             if stream.task.done() or stream.task.cancelled():
                 break
-            await stream.write(bytearray(f'no: {i} ', 'utf-8'))
+            await stream.write(i)
 
         await stream.write_eof()
         return stream
