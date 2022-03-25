@@ -1,8 +1,8 @@
 import os
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Any, Union
 
 
-def search_file(file_hash: str) -> str:
+def search_file(file_hash: str) -> Union[str, None]:
     """
     Search file in store
 
@@ -11,7 +11,11 @@ def search_file(file_hash: str) -> str:
 
     # TODO: improve search method (bu hash and etc.)
     """
-    list_files = os.listdir(f'store/{file_hash[:2]}')
+    try:
+        list_files = os.listdir(f'store/{file_hash[:2]}')
+    except:
+        return None
+
     for filename in list_files:
         if file_hash in filename:
             return f"store/{filename[:2]}/{filename}"
@@ -24,14 +28,15 @@ def mkdir(path: str) -> None:
     :param path: str - path to dirs
     :return: none
     """
+
     directory = os.path.dirname(path)
     try:
         os.stat(directory)
     except:
-        os.mkdir(directory)
+        os.makedirs(directory)
 
 
-async def file_provider(file_path: str) -> AsyncGenerator[bytes]:
+async def file_provider(file_path: str) -> AsyncGenerator[bytes, Any]:
     """
     File provider with chunks
 
