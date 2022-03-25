@@ -1,4 +1,5 @@
 import os
+from typing import AsyncGenerator
 
 
 def search_file(file_hash: str) -> str:
@@ -28,3 +29,17 @@ def mkdir(path: str) -> None:
         os.stat(directory)
     except:
         os.mkdir(directory)
+
+
+async def file_provider(file_path: str) -> AsyncGenerator[bytes]:
+    """
+    File provider with chunks
+
+    :param file_path: str - path to file
+    :return: AsyncGenerator[bytes]
+    """
+    with open(file_path, 'rb') as f:
+        chunk = True
+        while chunk:
+            chunk = f.read(2 ** 16)
+            yield chunk

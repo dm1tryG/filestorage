@@ -6,16 +6,8 @@ import hashlib
 from aiohttp import web
 from aiohttp.web import Request
 
-from helpers import mkdir, search_file
+from helpers import mkdir, search_file, file_provider
 
-
-async def file_provider(file_path=None):
-    """ File streamer """
-    with open(file_path, 'rb') as f:
-        chunk = True
-        while chunk:
-            chunk = f.read(2 ** 16)
-            yield chunk
 
 
 async def upload(request: Request):
